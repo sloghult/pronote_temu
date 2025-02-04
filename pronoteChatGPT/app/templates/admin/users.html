@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary mb-3" type="button" onclick="toggleAddUserForm()">
+                <i class="fas fa-plus me-2"></i>Ajouter un utilisateur
+            </button>
+
+            <div class="card mb-4" id="addUserForm" style="display: none;">
+                <div class="card-header">
+                    <h3>Ajouter un utilisateur</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('admin.users') }}">
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Type d'utilisateur</label>
+                            <select class="form-select" id="role" name="role" required onchange="toggleFields()">
+                                <option value="">Sélectionner un type d'utilisateur</option>
+                                <option value="admin">Administrateur</option>
+                                <option value="prof">Professeur</option>
+                                <option value="eleve">Élève</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="prof-fields" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="nom_prof" class="form-label">Nom</label>
+                                        <input type="text" class="form-control" id="nom_prof" name="nom_prof">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="prenom_prof" class="form-label">Prénom</label>
+                                        <input type="text" class="form-control" id="prenom_prof" name="prenom_prof">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="classe1" class="form-label">Classe 1</label>
+                                        <select class="form-select" id="classe1" name="classe1">
+                                            <option value="">Sélectionner une classe</option>
+                                            {% for classe in classes %}
+                                            <option value="{{ classe.id }}">{{ classe.classe }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="classe2" class="form-label">Classe 2</label>
+                                        <select class="form-select" id="classe2" name="classe2">
+                                            <option value="">Sélectionner une classe</option>
+                                            {% for classe in classes %}
+                                            <option value="{{ classe.id }}">{{ classe.classe }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="classe3" class="form-label">Classe 3</label>
+                                        <select class="form-select" id="classe3" name="classe3">
+                                            <option value="">Sélectionner une classe</option>
+                                            {% for classe in classes %}
+                                            <option value="{{ classe.id }}">{{ classe.classe }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="matiere" class="form-label">Matière 1</label>
+                                <select class="form-select" id="matiere" name="matiere">
+                                    <option value="">Sélectionner une matière</option>
+                                    {% for matiere in matieres %}
+                                    <option value="{{ matiere.id }}">{{ matiere.nom_matiere }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="matiere2" class="form-label">Matière 2</label>
+                                <select class="form-select" id="matiere2" name="matiere2">
+                                    <option value="">Sélectionner une matière</option>
+                                    {% for matiere in matieres %}
+                                    <option value="{{ matiere.id }}">{{ matiere.nom_matiere }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="matiere3" class="form-label">Matière 3</label>
+                                <select class="form-select" id="matiere3" name="matiere3">
+                                    <option value="">Sélectionner une matière</option>
+                                    {% for matiere in matieres %}
+                                    <option value="{{ matiere.id }}">{{ matiere.nom_matiere }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="eleve-fields" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="nom_eleve" class="form-label">Nom</label>
+                                        <input type="text" class="form-control" id="nom_eleve" name="nom_eleve">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="prenom_eleve" class="form-label">Prénom</label>
+                                        <input type="text" class="form-control" id="prenom_eleve" name="prenom_eleve">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="classe_eleve" class="form-label">Classe</label>
+                                        <select class="form-select" id="classe_eleve" name="classe_eleve">
+                                            <option value="">Sélectionner une classe</option>
+                                            {% for classe in classes %}
+                                            <option value="{{ classe.id }}">{{ classe.classe }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Mot de passe</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter l'utilisateur</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Liste des utilisateurs</h3>
+                    <select class="form-select w-auto" id="roleFilter" onchange="filterUsers()">
+                        <option value="">Tous les utilisateurs</option>
+                        <option value="admin">Administrateurs</option>
+                        <option value="prof">Professeurs</option>
+                        <option value="eleve">Élèves</option>
+                        <option value="parent">Parents</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Nom d'utilisateur</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Classe(s)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr data-role="{{ user.role }}">
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {% if user.role == 'admin' %}
+                                            Administrateur
+                                        {% elif user.role == 'prof' %}
+                                            Professeur
+                                        {% elif user.role == 'parent' %}
+                                            Parent
+                                        {% else %}
+                                            Élève
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.role == 'prof' %}
+                                            {% if user.classes_autorisees %}
+                                                {{ user.classes_autorisees|join(', ') }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% elif user.role == 'eleve' %}
+                                            {% if user.classe %}
+                                                {{ user.classe }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="post" style="display: inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                                                <i class="fas fa-trash"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAddUserForm() {
+    const form = document.getElementById('addUserForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleFields() {
+    const role = document.getElementById('role').value;
+    document.getElementById('prof-fields').style.display = role === 'prof' ? 'block' : 'none';
+    document.getElementById('eleve-fields').style.display = role === 'eleve' ? 'block' : 'none';
+}
+
+function filterUsers() {
+    const role = document.getElementById('roleFilter').value;
+    const rows = document.querySelectorAll('tr[data-role]');
+    rows.forEach(row => {
+        row.style.display = !role || row.dataset.role === role ? '' : 'none';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('roleFilter').addEventListener('change', filterUsers);
+});
+</script>
+{% endblock %}

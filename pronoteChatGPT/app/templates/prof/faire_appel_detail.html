@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Appel du {{ date }}, {{ creneau }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th class="text-center">Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for eleve in eleves %}
+                        <tr>
+                            <td>{{ eleve.nom }}</td>
+                            <td>{{ eleve.prenom }}</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="absent[]" value="{{ eleve.id }}" class="form-check-input">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Enregistrer l'appel</button>
+                    <a href="{{ url_for('prof.faire_appel') }}" class="btn btn-secondary">Retour</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

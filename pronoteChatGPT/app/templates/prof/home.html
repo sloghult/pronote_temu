@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Espace Professeur</h1>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Emploi du temps</h5>
+                    <p class="card-text">Consultez votre emploi du temps et vos salles de cours.</p>
+                    <a href="{{ url_for('prof.emploi_du_temps_page_prof') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Notes</h5>
+                    <p class="card-text">Gérez les notes et les moyennes de vos élèves.</p>
+                    <a href="{{ url_for('prof.notes_prof') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Appel</h5>
+                    <p class="card-text">Faites l'appel et gérez les absences.</p>
+                    <a href="{{ url_for('prof.appel') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

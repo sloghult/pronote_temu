@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if eleves %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Appel du {{ date }}, {{ creneau }}</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <input type="hidden" name="classe_id" value="{{ selected_classe_id }}">
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="creneau" value="{{ creneau }}">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th class="text-center">Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for eleve in eleves %}
+                        <tr>
+                            <td>{{ eleve.nom }}</td>
+                            <td>{{ eleve.prenom }}</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="absent[]" value="{{ eleve.id }}" class="form-check-input">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Enregistrer l'appel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Sélection de la classe</h4>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="classe_id" class="form-label">Classe</label>
+                    <select class="form-select" id="classe_id" name="classe_id" required>
+                        <option value="">Choisir une classe</option>
+                        {% for classe in classes %}
+                            <option value="{{ classe.id }}">{{ classe.classe }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="creneau" class="form-label">Créneau</label>
+                    <select class="form-select" id="creneau" name="creneau" required>
+                        <option value="">Choisir un créneau</option>
+                        <option value="8h-9h">8h-9h</option>
+                        <option value="9h-10h">9h-10h</option>
+                        <option value="10h-11h">10h-11h</option>
+                        <option value="11h-12h">11h-12h</option>
+                        <option value="14h-15h">14h-15h</option>
+                        <option value="15h-16h">15h-16h</option>
+                        <option value="16h-17h">16h-17h</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Afficher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

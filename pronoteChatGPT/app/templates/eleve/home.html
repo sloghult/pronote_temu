@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Espace Élève</h1>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Emploi du temps</h5>
+                    <p class="card-text">Consultez votre emploi du temps.</p>
+                    <a href="{{ url_for('eleve.emploi_du_temps_page_eleve') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Notes</h5>
+                    <p class="card-text">Consultez vos notes et moyennes.</p>
+                    <a href="{{ url_for('eleve.notes_eleve') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Absences</h5>
+                    <p class="card-text">Consultez vos absences.</p>
+                    <a href="{{ url_for('eleve.absences') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

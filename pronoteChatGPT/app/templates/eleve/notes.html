@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mes Notes</h1>
+
+    <!-- Notes par matière -->
+    <div class="row">
+        {% for matiere, notes_matiere in notes.items() %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">{{ matiere }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Devoir</th>
+                                    <th>Coefficient</th>
+                                    <th class="text-end">Note</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for note in notes_matiere %}
+                                <tr>
+                                    <td>
+                                        {{ note.nom_devoir }}
+                                    </td>
+                                    <td>{{ note.coef }}</td>
+                                    <td class="text-end fw-bold">{{ note.note }}/20</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                {% for moyenne in moyennes %}
+                                    {% if moyenne.nom_matiere == matiere %}
+                                    <tr class="table-info">
+                                        <td colspan="2" class="fw-bold">Moyenne</td>
+                                        <td class="text-end fw-bold">{{ "%.2f"|format(moyenne.moyenne) }}/20</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Moyenne générale -->
+    <div class="card mt-4">
+        <div class="card-body text-center">
+            <h3>Moyenne Générale</h3>
+            <h2 class="display-4 text-primary">{{ "%.2f"|format(moyenne_globale) }}/20</h2>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser les tooltips Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}
