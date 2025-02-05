@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary mb-3" type="button" onclick="toggleAddForm()">
+                <i class="fas fa-plus me-2"></i>Ajouter une classe
+            </button>
+
+            <!-- Formulaire d'ajout -->
+            <div class="card mb-4" id="addForm" style="display: none;">
+                <div class="card-header">
+                    <h3>Ajouter une classe</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom de la classe</label>
+                            <input type="text" class="form-control" id="nom" name="nom" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des classes -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Liste des classes</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nom de la classe</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for classe in classes %}
+                            <tr>
+                                <td>{{ classe.nom }}</td>
+                                <td>
+                                    <form action="{{ url_for('admin.supprimer_classe', nom=classe.nom) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette classe ?')">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAddForm() {
+    const form = document.getElementById('addForm');
+    const button = document.querySelector('button[onclick="toggleAddForm()"]');
+    
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+        button.innerHTML = '<i class="fas fa-minus me-2"></i>Masquer le formulaire';
+        button.classList.replace('btn-primary', 'btn-secondary');
+    } else {
+        form.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-plus me-2"></i>Ajouter une classe';
+        button.classList.replace('btn-secondary', 'btn-primary');
+    }
+}
+</script>
+{% endblock %}

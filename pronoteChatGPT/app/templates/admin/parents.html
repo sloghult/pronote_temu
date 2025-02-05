@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary mb-3" type="button" onclick="toggleAddParentForm()">
+                <i class="fas fa-plus me-2"></i>Ajouter un parent
+            </button>
+
+            <!-- Formulaire d'ajout -->
+            <div class="card mb-4" id="addParentForm" style="display: none;">
+                <div class="card-header">
+                    <h3>Ajouter un parent</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nom" class="form-label">Nom</label>
+                                    <input type="text" class="form-control" id="nom" name="nom" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="prenom" class="form-label">Prénom</label>
+                                    <input type="text" class="form-control" id="prenom" name="prenom" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Mot de passe</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="telephone" class="form-label">Téléphone</label>
+                                    <input type="tel" class="form-control" id="telephone" name="telephone">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="eleve_ids" class="form-label">Enfants</label>
+                                    <select class="form-select" id="eleve_ids" name="eleve_ids" multiple required>
+                                        {% for eleve in eleves %}
+                                            <option value="{{ eleve.id }}">
+                                                {{ eleve.nom }} {{ eleve.prenom }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <small class="text-muted">Maintenez Ctrl pour sélectionner plusieurs élèves</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="relation" class="form-label">Relation</label>
+                                    <select class="form-select" id="relation" name="relation" required>
+                                        <option value="">Sélectionner une relation</option>
+                                        <option value="père">Père</option>
+                                        <option value="mère">Mère</option>
+                                        <option value="tuteur">Tuteur</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Ajouter le parent</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des parents -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Liste des parents</h3>
+                </div>
+                <div class="card-body">
+                    {% if parents %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Téléphone</th>
+                                        <th>Enfants</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for parent in parents %}
+                                        <tr>
+                                            <td>{{ parent.nom }}</td>
+                                            <td>{{ parent.prenom }}</td>
+                                            <td>{{ parent.username }}</td>
+                                            <td>{{ parent.email }}</td>
+                                            <td>{{ parent.telephone or 'Non renseigné' }}</td>
+                                            <td>{{ parent.enfants or 'Aucun enfant' }}</td>
+                                            <td>
+                                                <form method="POST" action="{{ url_for('admin.delete_parent', parent_id=parent.parent_id) }}" 
+                                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce parent ?');"
+                                                      style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Aucun parent n'est enregistré.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAddParentForm() {
+    const form = document.getElementById('addParentForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

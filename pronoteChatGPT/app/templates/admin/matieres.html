@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary mb-3" type="button" onclick="toggleAddForm()">
+                <i class="fas fa-plus me-2"></i>Ajouter une matière
+            </button>
+
+            <!-- Formulaire d'ajout -->
+            <div class="card mb-4" id="addForm" style="display: none;">
+                <div class="card-header">
+                    <h3>Ajouter une matière</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="nom_matiere" class="form-label">Nom de la matière</label>
+                            <input type="text" class="form-control" id="nom_matiere" name="nom_matiere" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des matières -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Liste des Matières</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Matière</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for matiere in matieres %}
+                            <tr>
+                                <td>{{ matiere.nom_matiere }}</td>
+                                <td>
+                                    <form action="{{ url_for('admin.delete_matiere', matiere_id=matiere.id) }}" method="post">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette matière ?')">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAddForm() {
+    const form = document.getElementById('addForm');
+    const button = document.querySelector('button[onclick="toggleAddForm()"]');
+    
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+        button.innerHTML = '<i class="fas fa-minus me-2"></i>Masquer le formulaire';
+        button.classList.replace('btn-primary', 'btn-secondary');
+    } else {
+        form.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-plus me-2"></i>Ajouter une matière';
+        button.classList.replace('btn-secondary', 'btn-primary');
+    }
+}
+</script>
+{% endblock %}

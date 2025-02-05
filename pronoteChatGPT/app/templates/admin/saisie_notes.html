@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Saisie des notes - {{ nom_devoir }}</h3>
+            <p>Classe : {{ classe }} - Matière : {{ matiere }} - Coefficient : {{ coefficient }}</p>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('admin.ajouter_devoir') }}" method="POST">
+                <input type="hidden" name="classe_id" value="{{ classe_id }}">
+                <input type="hidden" name="matiere_id" value="{{ matiere_id }}">
+                <input type="hidden" name="nom_devoir" value="{{ nom_devoir }}">
+                <input type="hidden" name="coefficient" value="{{ coefficient }}">
+                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Élève</th>
+                                <th>Note /20</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for eleve in eleves %}
+                                <tr>
+                                    <td>{{ eleve.nom }} {{ eleve.prenom }}</td>
+                                    <td>
+                                        <input type="hidden" name="eleve_ids[]" value="{{ eleve.id }}">
+                                        <input type="number" class="form-control" name="notes[]" 
+                                               min="0" max="20" step="0.5" style="width: 100px;">
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Enregistrer les notes</button>
+                    <a href="{{ url_for('admin.notes') }}" class="btn btn-secondary">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('form').onsubmit = function(e) {
+    const notes = document.querySelectorAll('input[type="number"]');
+    let hasValidNote = false;
+    
+    notes.forEach(input => {
+        if (input.value.trim() !== '') {
+            const note = parseFloat(input.value);
+            if (note < 0 || note > 20) {
+                e.preventDefault();
+                alert('Les notes doivent être comprises entre 0 et 20');
+                return;
+            }
+            hasValidNote = true;
+        }
+    });
+    
+    if (!hasValidNote) {
+        e.preventDefault();
+        alert('Veuillez saisir au moins une note');
+    }
+};
+</script>
+{% endblock %}
